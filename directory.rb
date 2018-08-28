@@ -3,27 +3,13 @@ def print_header
   puts "--------------"
 end
 def print(students)
-  students.each_with_index do |student, index|
-      puts "#{index + 1}.  #{student[:name]} (Student status: #{student[:status]})"
+  counter = students.length
+  while counter > 0
+    removed_student = students.shift
+    puts "#{removed_student[:name]} (Student status: #{removed_student[:status]})}"
+    counter -= 1
   end
 end
-def print_only_K_names(students, letter)
-  puts "These students are the ones whose names begin with \"K\" "
-  students.each_with_index do |student, index|
-      if student[:name][0].upcase == letter
-        puts "#{index + 1}.  #{student[:name]} (Student status: #{student[:status]})"
-      end
-    end
-end
-
-def print_long_names_only(students, length)
-  students.each do |student|
-     if student[:name].length > length
-         puts "#{student[:name]} (Student status: #{student[:status]})"
-     end
-   end
-end
-
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
@@ -42,7 +28,5 @@ def input_students
 end
 students = input_students
 print_header
-print(students)
+print(students.clone)
 print_footer(students)
-# print_only_K_names(students, "M")
-print_long_names_only(students, 4)
