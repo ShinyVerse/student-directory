@@ -13,7 +13,7 @@ def print(students)
   end
 end
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students"
+  puts "Overall, we have #{names.count} great " + (names.count > 1 ? "students" : "student")
 end
 def input_break_loop?(entry)
    return true if entry == 'stop'
@@ -54,7 +54,7 @@ def input_students
       pokemon = "Jigglypuff"
     end
     students << {name: name, status: status.to_sym, fav_pokemon: pokemon}
-    puts "Now we have #{students.count} students"
+    puts "Now we have #{students.count} " + (students.count == 1?  "student" : "students")
   end
   students
 end
