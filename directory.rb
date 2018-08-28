@@ -4,8 +4,16 @@ def print_header
 end
 def print(students)
   students.each_with_index do |student, index|
-    puts "#{index + 1}.  #{student[:name]} (Student status: #{student[:status]})"
+      puts "#{index + 1}.  #{student[:name]} (Student status: #{student[:status]})"
   end
+end
+def print_only_K_names(students)
+  puts "These students are the ones whose names begin with \"K\" "
+  students.each_with_index do |student, index|
+      if student[:name][0].upcase == "K"
+        puts "#{index + 1}.  #{student[:name]} (Student status: #{student[:status]})"
+      end
+    end
 end
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
@@ -27,3 +35,4 @@ students = input_students
 print_header
 print(students)
 print_footer(students)
+print_only_K_names(students)
