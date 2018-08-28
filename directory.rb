@@ -2,7 +2,7 @@ def print_header
   puts "The students of Cerulean City Gym"
   puts "--------------"
 end
-def print(students)
+def print_students(students)
   counter = students.length
   while counter > 0
     removed_student = students.shift
@@ -25,7 +25,7 @@ def print_by_status(students, status)
         returned_collection.push(student)
       end
   end
-  print(returned_collection)
+  print_students(returned_collection)
 end
 
 def input_students
@@ -42,7 +42,8 @@ def input_students
     status = gets.chomp
     break if input_break_loop?(status)
     puts "Favourite Pokemon: "
-    pokemon = gets.chomp
+    # Use of someting other than chomp.
+    pokemon = gets.strip
     break if input_break_loop?(pokemon)
     if name.empty?
       name = "Unknown"
@@ -60,6 +61,13 @@ def input_students
 end
 students = input_students
 print_header
-print(students.clone)
-print_footer(students)
+if students.length > 0
+  print_students(students.clone)
+  print_footer(students)
+  print_by_status(students, :current)
+else
+  puts "There are no students yet :("
+end
+
+
 print_by_status(students, :current)
