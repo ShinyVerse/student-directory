@@ -1,14 +1,3 @@
-students = [
-  {name: "Misty",  status: :current},
-  {name: "Daisy", status: :current},
-  {name: "Lily", status: :current},
-  {name: "Violet", status: :current},
-  {name: "Ash Ketchum", status: :current},
-  {name: "Aquaman", status: :previous},
-  {name: "Jar Jar Binks", status: :previous},
-  {name: "Ariel", status: :previous},
-  {name: "Melody", status: :current}
-]
 def print_header
   puts "The students of Cerulean City Gym"
   puts "--------------"
@@ -22,6 +11,19 @@ def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
 
+def input_students
+  puts "Please enter the names of the students"
+  puts "To finish, just hit return twice"
+  students = []
+  name = gets.chomp
+  while !name.empty? do
+    students << {name: name, status: :current}
+    puts "Now we have #{students.count} students"
+    name = gets.chomp
+  end
+  students
+end
+students = input_students
 print_header
 print(students)
 print_footer(students)
