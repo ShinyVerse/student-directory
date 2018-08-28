@@ -7,10 +7,10 @@ def print(students)
       puts "#{index + 1}.  #{student[:name]} (Student status: #{student[:status]})"
   end
 end
-def print_only_K_names(students)
+def print_only_K_names(students, letter)
   puts "These students are the ones whose names begin with \"K\" "
   students.each_with_index do |student, index|
-      if student[:name][0].upcase == "K"
+      if student[:name][0].upcase == letter
         puts "#{index + 1}.  #{student[:name]} (Student status: #{student[:status]})"
       end
     end
@@ -35,4 +35,4 @@ students = input_students
 print_header
 print(students)
 print_footer(students)
-print_only_K_names(students)
+print_only_K_names(students, "M")
