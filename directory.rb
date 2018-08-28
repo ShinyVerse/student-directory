@@ -18,6 +18,15 @@ end
 def input_break_loop?(entry)
    return true if entry == 'stop'
 end
+def print_by_status(students, status)
+  returned_collection = []
+  students.map do | student |
+      if student[:status] == status
+        returned_collection.push(student)
+      end
+  end
+  print(returned_collection)
+end
 
 def input_students
   puts "Please enter the names of the students"
@@ -53,3 +62,4 @@ students = input_students
 print_header
 print(students.clone)
 print_footer(students)
+print_by_status(students, :current)
