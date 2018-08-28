@@ -15,6 +15,15 @@ def print_only_K_names(students, letter)
       end
     end
 end
+
+def print_long_names_only(students, length)
+  students.each do |student|
+     if student[:name].length > length
+         puts "#{student[:name]} (Student status: #{student[:status]})"
+     end
+   end
+end
+
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
@@ -35,4 +44,5 @@ students = input_students
 print_header
 print(students)
 print_footer(students)
-print_only_K_names(students, "M")
+# print_only_K_names(students, "M")
+print_long_names_only(students, 4)
