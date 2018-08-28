@@ -3,8 +3,8 @@ def print_header
   puts "--------------"
 end
 def print(students)
-  students.each do |student|
-    puts "#{student[:name]} (Student status: #{student[:status]})"
+  students.each_with_index do |student, index|
+    puts "#{index + 1}.  #{student[:name]} (Student status: #{student[:status]})"
   end
 end
 def print_footer(names)
