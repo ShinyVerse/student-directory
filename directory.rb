@@ -9,3 +9,7 @@ puts "Aquaman"
 puts "Jar Jar Binks"
 puts "Ariel"
 puts "Melody"
+
+print "Overall, we have \n"
+print 9
+puts " great students"
