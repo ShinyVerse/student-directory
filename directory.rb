@@ -1,15 +1,17 @@
+students = [
+  "Misty",
+  "Daisy",
+  "Lily",
+  "Violet",
+  "Ash Ketchum",
+  "Aquaman",
+  "Jar Jar Binks",
+  "Ariel",
+  "Melody"
+]
 puts "The students of Cerulean City Gym"
 puts "--------------"
-puts "Misty"
-puts "Daisy"
-puts "Lily"
-puts "Violet"
-puts "Ash Ketchum"
-puts "Aquaman"
-puts "Jar Jar Binks"
-puts "Ariel"
-puts "Melody"
-
-print "Overall, we have \n"
-print 9
-puts " great students"
+students.each do |student|
+  puts student
+end
+puts "Overall, we have #{students.count} great students"
