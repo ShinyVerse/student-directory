@@ -15,16 +15,37 @@ end
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
+def input_break_loop?(entry)
+   return true if entry == 'stop'
+end
 
 def input_students
   puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
+  puts "Followed by the current status"
+  puts "Then a favourite Pokemon"
+  puts "To finish, enter command 'stop'"
   students = []
-  name = gets.chomp
-  while !name.empty? do
-    students << {name: name, status: :current, fav_pokemon: "Squirtle"}
-    puts "Now we have #{students.count} students"
+  while true do
+    puts "Name: "
     name = gets.chomp
+    break if input_break_loop?(name)
+    puts "Status: "
+    status = gets.chomp
+    break if input_break_loop?(status)
+    puts "Favourite Pokemon: "
+    pokemon = gets.chomp
+    break if input_break_loop?(pokemon)
+    if name.empty?
+      name = "Unknown"
+    end
+    if status.empty?
+      status = :current
+    end
+    if pokemon.empty?
+      pokemon = "Jigglypuff"
+    end
+    students << {name: name, status: status.to_sym, fav_pokemon: pokemon}
+    puts "Now we have #{students.count} students"
   end
   students
 end
