@@ -1,6 +1,35 @@
 @students = []
 
-def print_students
+def print_menu
+  puts "[1] Input students"
+  puts "[2] Show the students"
+  puts "[9] Exit"
+end
+
+def show_students
+  if !@students.empty?
+    print_header
+    print_students_list
+    print_footer
+  else
+    puts "\nThere are no students yet :("
+  end
+end
+
+def process(selection)
+  case selection
+  when "1"
+    @students = input_students
+  when "2"
+    show_students
+  when "9"
+    exit
+  else
+    puts "I don't know what you mean, try again"
+  end
+end
+
+def print_students_list
   @students.each_with_index do |student, index|
       puts "#{index + 1}. #{student[:name]}".center(30)
       puts "Student status: #{student[:status]}".center(30)
@@ -60,29 +89,8 @@ end
 
 def interactive_menu
   loop do
-    # 1. print the menu and ask the user what to do
-    puts "[1] Input students"
-    puts "[2] Show the students"
-    puts "[9] Exit"
-    # 2. read the input and save it into a variable
-    selection = gets.chomp
-    # 3. do what the user has asked
-    case selection
-    when "1"
-      @students = input_students
-    when "2"
-      if !@students.empty?
-        print_header
-        print_students
-        print_footer
-      else
-        puts "\nThere are no students yet :("
-      end
-    when "9"
-      exit
-    else
-      puts "I don't know what you mean, try again"
-    end
+    print_menu
+    process(gets.chomp)
   end
 end
 
