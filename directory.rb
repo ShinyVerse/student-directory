@@ -1,5 +1,9 @@
 @students = []
 
+def push_students_to_list(name, status, pokemon)
+  @students << {name: name, status: status.to_sym, fav_pokemon: pokemon}
+end
+
 def print_menu
   puts "[1] Input students"
   puts "[2] Show the students"
@@ -49,7 +53,6 @@ def input_break_loop?(entry)
 end
 
 def input_students
-  local_students = []
   puts "Please enter the names of the students"
   puts "Followed by the current status"
   puts "Then a favourite Pokemon"
@@ -74,11 +77,11 @@ def input_students
     if pokemon.empty?
       pokemon = "Jigglypuff"
     end
-    local_students << {name: name, status: status.to_sym, fav_pokemon: pokemon}
-    puts "Now we have #{local_students.count} " + (local_students.count == 1?  "student\n" : "students\n")
+    push_students_to_list(name, status, pokemon)
+    puts "Now we have #{@students.count} " + (@students.count == 1?  "student\n" : "students\n")
   end
-  if local_students.length > 0
-     @students = local_students
+  if @students.length > 0
+     @students
   else
     @students = []
   end
@@ -107,7 +110,7 @@ def load_students(filename ="students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, status, fav_pokemon = line.chomp.split(",")
-    @students << {name: name, status: status.to_sym, fav_pokemon: fav_pokemon}
+    push_students_to_list(name, status, fav_pokemon)
   end
   file.close
 end
