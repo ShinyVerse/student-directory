@@ -1,23 +1,21 @@
 def print_header
   puts "The students of Cerulean City Gym"
-  puts "--------------"
+  puts "--------------".center(30)
 end
 def print_students(students)
-  counter = students.length
-  while counter > 0
-    removed_student = students.shift
-    puts "Name: #{removed_student[:name]}".center(30)
-    puts "(Student status: #{removed_student[:status]})".center(30)
-    puts "(Favourite Pokemon: #{removed_student[:fav_pokemon]})".center(30)
-    counter -= 1
-  end
+  students.each_with_index do |student, index|
+      puts "#{index + 1}.  #{student[:name]} (Student status: #{student[:status]})"
+    end
 end
+
 def print_footer(names)
-  puts "Overall, we have #{names.count} great " + (names.count > 1 ? "students" : "student")
+  puts "\nOverall, we have #{names.count} great " + (names.count > 1 ? "students\n" : "student\n")
 end
+
 def input_break_loop?(entry)
    return true if entry == 'stop'
 end
+
 def print_by_status(students, status)
   returned_collection = []
   students.map do | student |
@@ -29,10 +27,6 @@ def print_by_status(students, status)
 end
 
 def input_students
-  puts "Please enter the names of the students"
-  puts "Followed by the current status"
-  puts "Then a favourite Pokemon"
-  puts "To finish, enter command 'stop'"
   students = []
   while true do
     puts "Name: "
@@ -55,19 +49,43 @@ def input_students
       pokemon = "Jigglypuff"
     end
     students << {name: name, status: status.to_sym, fav_pokemon: pokemon}
-    puts "Now we have #{students.count} " + (students.count == 1?  "student" : "students")
+    puts "Now we have #{students.count} " + (students.count == 1?  "student\n" : "students\n")
   end
-  students
-end
-students = input_students
-print_header
-if students.length > 0
-  print_students(students.clone)
-  print_footer(students)
-  print_by_status(students, :current)
-else
-  puts "There are no students yet :("
+  if students.length > 0
+    return students
+  else
+    return students = []
+  end
 end
 
 
-print_by_status(students, :current)
+def interactive_menu
+  students = []
+  loop do
+    # 1. print the menu and ask the user what to do
+    puts "[1] Input students"
+    puts "[2] Show the students"
+    puts "[9] Exit"
+    # 2. read the input and save it into a variable
+    selection = gets.chomp
+    # 3. do what the user has asked
+    case selection
+    when "1"
+      students = input_students
+    when "2"
+      if !students.empty?
+        print_header
+        print_students(students.clone)
+        print_footer(students)
+      else
+        puts "\nThere are no students yet :("
+      end
+    when "9"
+      exit
+    else
+      puts "I don't know what you mean, try again"
+    end
+  end
+end
+
+interactive_menu
