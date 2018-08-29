@@ -4,7 +4,9 @@ def print_header
 end
 def print_students(students)
   students.each_with_index do |student, index|
-      puts "#{index + 1}.  #{student[:name]} (Student status: #{student[:status]})"
+      puts "#{index + 1}. #{student[:name]}".center(30)
+      puts "Student status: #{student[:status]}".center(30)
+      puts "Favourite Pokemon: #{student[:fav_pokemon]}\n".center(30)
     end
 end
 
@@ -27,6 +29,10 @@ def print_by_status(students, status)
 end
 
 def input_students
+  puts "Please enter the names of the students"
+  puts "Followed by the current status"
+  puts "Then a favourite Pokemon"
+  puts "To finish, enter command 'stop'"
   students = []
   while true do
     puts "Name: "
