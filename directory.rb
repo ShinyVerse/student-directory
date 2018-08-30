@@ -26,7 +26,7 @@ def print_menu
   options = ["[1] Input students",
   "[2] Show the students",
   "[3] Save the list to #{@current_directory}",
-  "[4] Load the list from students.csv",
+  "[4] Load the list from #{@current_directory}",
   "[5] Change directory",
   "[9] Exit"]
   options.each {|option| puts option}
@@ -147,6 +147,9 @@ def save_students
         counter -= 1
       end
       @known_directories.push(filename)
+      save_to_gitignore(filename)
+      save_directories
+      load_directories("directories.csv")
     else
       @students.each do |student|
         student_data = [student[:name], student[:status], student[:fav_pokemon]]
@@ -158,6 +161,11 @@ def save_students
     @student_array_length_flag = @students.length
   end
   file.close
+end
+def save_to_gitignore(filename)
+   file = File.open('.gitignore', 'a')
+   file << filename
+   file.close
 end
 
 def load_students(filename = @current_directory)
@@ -177,6 +185,33 @@ def load_students(filename = @current_directory)
   file.close
 end
 
+def save_directories
+  file = File.open('directories.csv', 'w')
+  directories = @known_directories
+  csv_line = directories.join(",")
+  file.puts csv_line
+  file.close
+end
+
+def load_directories(filename)
+  file = File.open(filename, "r")
+  file.readlines.each do |line|
+    directory = line.chomp.split(",")
+    @known_directories << directory
+  end
+  file.close
+end
+
+def try_load_directories
+  filename = ARGV.first || "directories.csv"
+  return if filename.nil?
+  if File.exists?(filename)
+    load_directories(filename)
+  else
+    return
+  end
+end
+
 def try_load_students
   filename = ARGV.first || @current_directory
   return if filename.nil?
@@ -191,6 +226,7 @@ end
 
 def interactive_menu
   try_load_students
+  try_load_directories
   loop do
     print_menu
     process(STDIN.gets.chomp)
