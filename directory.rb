@@ -1,5 +1,7 @@
 @students = []
 @student_array_length_flag = "empty"
+@current_directory = "students.csv"
+@known_directories = ["students.csv", "example.csv"]
 
 def push_students_to_list(name, status, pokemon)
   @students << {name: name, status: status.to_sym, fav_pokemon: pokemon}
@@ -23,8 +25,9 @@ end
 def print_menu
   options = ["[1] Input students",
   "[2] Show the students",
-  "[3] Save the list to students.csv",
+  "[3] Save the list to #{@current_directory}",
   "[4] Load the list from students.csv",
+  "[5] Change directory",
   "[9] Exit"]
   options.each {|option| puts option}
 end
@@ -38,6 +41,18 @@ def show_students
     puts "\nThere are no students yet :("
   end
 end
+def change_directory
+  directory_name = gets.chomp
+  if @known_directories.include?(directory_name)
+    @current_directory = directory_name
+    @students = []
+    @student_array_length_flag = "empty"
+    try_load_students
+  else
+    puts "That directory doesn't exist yet, create it when in save option!"
+    return
+  end
+end
 
 def process(selection)
   actions_for_selection = {
@@ -45,6 +60,7 @@ def process(selection)
     "2" => lambda { show_students },
     "3" => lambda { save_students },
     "4" => lambda { load_students },
+    "5" => lambda { change_directory},
     "9" => lambda { exit } }
   if actions_for_selection.key?(selection)
      actions_for_selection[selection].call
@@ -112,11 +128,31 @@ def save_students
     puts "Please enter new students before saving!"
     return
   else
-    file = File.open("students.csv", "w")
-    @students.each do |student|
-      student_data = [student[:name], student[:status], student[:fav_pokemon]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+    puts "Where would you like to save to? Press enter to save to default: students.csv"
+    filename = gets.chomp
+    if @known_directories.include?(filename)
+      puts "That directory already exists, please change to #{filename} directory."
+      return
+    end
+    filename = @current_directory if filename == ""
+    file = File.open(filename, "w")
+    if filename != @current_directory
+      counter =  @students.length - @student_array_length_flag
+      puts counter
+      while counter != 0
+        student = @students.pop
+        student_data = [student[:name], student[:status], student[:fav_pokemon]]
+        csv_line = student_data.join(",")
+        file.puts csv_line
+        counter -= 1
+      end
+      @known_directories.push(filename)
+    else
+      @students.each do |student|
+        student_data = [student[:name], student[:status], student[:fav_pokemon]]
+        csv_line = student_data.join(",")
+        file.puts csv_line
+      end
     end
     puts "New students have been saved!"
     @student_array_length_flag = @students.length
@@ -124,7 +160,7 @@ def save_students
   file.close
 end
 
-def load_students(filename ="students.csv")
+def load_students(filename = @current_directory)
   file = File.open(filename, "r")
   line_count = `wc -l "#{filename}"`.strip.split(' ')[0].to_i
   if line_count == @student_array_length_flag
@@ -142,7 +178,7 @@ def load_students(filename ="students.csv")
 end
 
 def try_load_students
-  filename = ARGV.first || "students.csv"
+  filename = ARGV.first || @current_directory
   return if filename.nil?
   if File.exists?(filename)
     load_students(filename)
