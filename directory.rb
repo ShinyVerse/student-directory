@@ -109,6 +109,7 @@ end
 
 def save_students
   if @student_array_length_flag == @students.length
+    puts "Please enter new students before saving!"
     return
   else
     file = File.open("students.csv", "w")
@@ -117,6 +118,8 @@ def save_students
       csv_line = student_data.join(",")
       file.puts csv_line
     end
+    puts "New students have been saved!"
+    @student_array_length_flag = @students.length
   end
   file.close
 end
@@ -125,13 +128,15 @@ def load_students(filename ="students.csv")
   file = File.open(filename, "r")
   line_count = `wc -l "#{filename}"`.strip.split(' ')[0].to_i
   if line_count == @student_array_length_flag
-    nil
+    puts "Students already loaded"
+    return
   else
     file.readlines.each do |line|
       name, status, fav_pokemon = line.chomp.split(",")
       push_students_to_list(name, status, fav_pokemon)
       set_student_array_length_flag
     end
+    puts "Students loaded!"
   end
   file.close
 end
