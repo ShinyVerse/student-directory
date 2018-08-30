@@ -116,7 +116,7 @@ def load_students(filename ="students.csv")
 end
 
 def try_load_students
-  filename = ARGV.first
+  filename = ARGV.first || "students.csv"
   return if filename.nil?
   if File.exists?(filename)
     load_students(filename)
