@@ -98,7 +98,7 @@ def save_students
     puts "Where would you like to save to? Press enter to save to default: #{@current_directory}"
     filename = gets.chomp
     filename = @current_directory if filename == ""
-    if @known_directories.include?(filename)
+    if @known_directories.include?(filename) && filename != @current_directory
       puts "That directory already exists, please change to #{filename} directory."
       return
     elsif filename != @current_directory
@@ -110,9 +110,9 @@ def save_students
           counter -= 1
         end
       end
-      # save_directories
-      # load_directories(file_path('directorycol.csv'))
-      # @known_directories.push(filename)
+      @known_directories.push(filename)
+      #puts ":::::::::::::: #{@known_directories}:::::::::::::: "
+      save_directories
       return
     elsif filename == @current_directory
       CSV.open(file_path(filename), "w") do |file|
@@ -138,13 +138,26 @@ def load_students(filepath)
   end
 end
 
+def change_directory
+  directory_name = gets.chomp
+  if @known_directories.include?(directory_name)
+    @current_directory = directory_name
+    @students = []
+    @student_array_length_flag = "empty"
+    try_load_students
+  else
+    puts "That directory doesn't exist yet, create it when in save option!"
+    return
+  end
+end
+
 def process(selection)
   actions_for_selection = {
     "1" => lambda { @students = input_students},
     "2" => lambda { show_students },
     "3" => lambda { save_students },
     "4" => lambda { load_students(file_path(@current_directory)) },
-    # "5" => lambda { change_directory},
+    "5" => lambda { change_directory},
     "9" => lambda { exit }
   }
   if actions_for_selection.key?(selection)
@@ -164,18 +177,16 @@ def print_footer
 end
 
 def save_directories
-  CSV.open(file_path('directorycol.csv'), "w") do |csv|
-    @known_directories.each do |directory|
-      csv << [directory]
-    end
+  file = File.open(file_path('directorycol.csv'), "w")
+  @known_directories.each do |directory|
+    file.puts directory
   end
-  print @known_directories
+  file.close
 end
 
 def load_directories(filename)
-  CSV.foreach(filename) do |directory|
-    @known_directories << [directory]
-  end
+  @known_directories = File.open(filename).read.split("\n")
+  puts "Available Directories  ::::: #{@known_directories}"
 end
 
 def try_load_directories
