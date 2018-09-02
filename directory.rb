@@ -1,13 +1,11 @@
 require 'csv'
+require_relative './file_helper'
+include FileHelper
 
 @students = []
 @student_array_length_flag = "empty"
 @current_directory = "students.csv"
 @known_directories = []
-
-def file_path(filename)
-  file_path = File.expand_path(filename, File.dirname(__FILE__))
-end
 
 def pluralization_of_students
   " we have #{@students.count}" + " great " + (@students.count == 1?  "student\n" : "students\n")
@@ -73,8 +71,7 @@ def print_students_list
   @students.each_with_index do |student, index|
       puts "#{index + 1}. #{student[:name]}".center(30)
       puts "Student status: #{student[:status]}".center(30)
-      puts "Favourite Pokemon: #{student[:fav_pokemon]}".center(30)
-      puts "\n"
+      puts "Favourite Pokemon: #{student[:fav_pokemon]}\n\n".center(30)
     end
 end
 
@@ -132,13 +129,11 @@ def save_to_gitignore
 end
 
 def load_students(filepath)
-  CSV.foreach(filepath) do |line|
-    line_count = `wc -l "#{filepath}"`.strip.split(' ')[0].to_i
-    if line_count == @student_array_length_flag
-      puts "\nAll current students already loaded"
-      puts "\n"
-      return
-    else
+  line_count = `wc -l "#{filepath}"`.strip.split(' ')[0].to_i
+  if line_count == @student_array_length_flag
+    puts "\nAll current students already loaded\n\n"
+  else
+    CSV.foreach(filepath) do |line|
       name, status, fav_pokemon = line
       push_students_to_list(name, status, fav_pokemon)
     end
@@ -158,7 +153,7 @@ def change_directory
   end
 end
 
-def process(selection)
+def process_menu_selection(selection)
   actions_for_selection = {
     "1" => lambda { @students = input_students},
     "2" => lambda { show_students },
@@ -224,7 +219,8 @@ def interactive_menu
   try_load_directories
   loop do
     print_menu
-    process(STDIN.gets.chomp)
+    process_menu_selection(STDIN.gets.chomp)
   end
 end
+
 interactive_menu
